@@ -1,2 +1,3 @@
 pub mod compiler;
-pub mod luau;
+pub mod vm;
+pub mod ast;

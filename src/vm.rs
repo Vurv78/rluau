@@ -2,4 +2,4 @@
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
 
-include!(concat!(env!("OUT_DIR"), "/binds_compiler.rs"));
+include!(concat!(env!("OUT_DIR"), "/binds_vm.rs"));

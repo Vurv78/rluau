@@ -48,10 +48,15 @@ fn gen_bindings<S: Into<String>, P: AsRef<Path>>(src: S, out: P) -> Result<(), G
 		.clang_arg("-std=c++17")
 		.clang_arg("-xc++")
 		.clang_args( INCLUDES.map(|s| format!("-I{}", s)) )
+		.allowlist_recursively(true)
+		.allowlist_function("(lua|Lua).*")
+		.allowlist_var("lua.*")
+		// Allowing for Lua causes for a variable that I can't seem to be able to blocklist to appear.
+		// This causes https://github.com/rust-lang/rust-bindgen/issues/1496.
+		.allowlist_type("(lua|Lua).*")
+		.allowlist_type(".*(Luau|BytecodeBuilder).*")
 		.header(src)
-		.allowlist_function("(luau|Luau).*")
-		.allowlist_var("(luau|Luau).*")
-		.allowlist_type("(luau|Luau).*")
+		.conservative_inline_namespaces()
 		.layout_tests(false)
 		.generate()
 		.map_err(|_| GeneratorError::BindgenFailure)?;
@@ -63,12 +68,21 @@ fn gen_bindings<S: Into<String>, P: AsRef<Path>>(src: S, out: P) -> Result<(), G
 	Ok(())
 }
 
-fn main() -> Result<(), GeneratorError> {
-
-	// Generate .lib and object files
+#[cfg(not(feature = "no-link"))]
+fn link() -> Result<(), std::io::Error> {
 	let mut conf = cc::Build::new();
-	setup_configs(&mut conf).map_err(GeneratorError::WriteFailure)?;
+	setup_configs(&mut conf)?;
 	conf.compile("luau");
+
+	println!("cargo:rustc-link-lib=static=luau");
+}
+
+#[cfg(feature = "no-link")]
+fn link() -> Result<(), std::io::Error> { Ok(()) }
+
+fn main() -> Result<(), GeneratorError> {
+	// Generate .lib and object files
+	link().map_err(GeneratorError::WriteFailure)?;
 
 	let out_dir = PathBuf::from( std::env::var("OUT_DIR").map_err(GeneratorError::VarError)? );
 

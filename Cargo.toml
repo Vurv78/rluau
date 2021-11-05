@@ -14,3 +14,7 @@ crate-type = ["lib"]
 walkdir = "2.3.2"
 bindgen = "0.59.1"
 cc = "1.0.71"
+
+[features]
+default = []
+no-link = []

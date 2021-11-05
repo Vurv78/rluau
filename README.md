@@ -1,8 +1,8 @@
 # 🌔 ``luau-rs``
 > [Luau](https://github.com/Roblox/luau) bindings for the [Rust](https://www.rust-lang.org) programming language using [bindgen](https://github.com/rust-lang/rust-bindgen)
 
-## ⚠️ WIP ⚠️
-Currently this **DOES NOT** compile because of issues with the compiler & ast w/ bindgen. Need a manual fix for this.
+## ⚠️ Disclaimer
+This does not provide bindings for everything as luau does not provide an adequate API for C bindings, which trips up bindgen & makes ffi exponentially more difficult (thanks to using C++'s ``std::string`` and whatnot). See [luau/121](https://github.com/Roblox/luau/issues/121). (It is also *untested* thanks to this..)
 
 ## Usage
 Add this to your ``Cargo.toml``

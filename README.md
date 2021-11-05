@@ -8,7 +8,7 @@ This does not provide bindings for everything as luau does not provide an adequa
 Add this to your ``Cargo.toml``
 ```toml
 [dependencies]
-luau = { git = "https://github.com/Vurv78/luau-rs" }
+luau = { version = "0.1.0", package = "luau-src" }
 ```
 
 ## Requirements

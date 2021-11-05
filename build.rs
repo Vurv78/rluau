@@ -11,13 +11,14 @@ const SOURCES: [&str; 4] = ["luau/VM/src", "luau/Ast/src", "luau/Analysis/src", 
 const INCLUDES: [&str; 4] = ["luau/VM/include", "luau/Ast/include", "luau/Analysis/include", "luau/Compiler/include"];
 
 fn setup_configs(conf: &mut cc::Build) -> Result<(), std::io::Error> {
+	let out = std::env::var("OUT_DIR").unwrap(); // Temporary, cba rn
 	conf
 		.opt_level(2)
 		.cpp(true)
 		.flag_if_supported("-std=c++17")
 		.flag_if_supported("/std:c++17")
 		.includes(INCLUDES.iter())
-		.out_dir( Path::new("./build") );
+		.out_dir( Path::new(&out).join("build") );
 
 	for src in SOURCES {
 		let iter = walkdir::WalkDir::new(src).into_iter().filter_map(|e| {
@@ -75,6 +76,7 @@ fn link() -> Result<(), std::io::Error> {
 	conf.compile("luau");
 
 	println!("cargo:rustc-link-lib=static=luau");
+	Ok(())
 }
 
 #[cfg(feature = "no-link")]
@@ -82,9 +84,9 @@ fn link() -> Result<(), std::io::Error> { Ok(()) }
 
 fn main() -> Result<(), GeneratorError> {
 	// Generate .lib and object files
-	link().map_err(GeneratorError::WriteFailure)?;
+	let out_dir = PathBuf::from( std::env::var("OUT_DIR").map_err(GeneratorError::VarError)?);
 
-	let out_dir = PathBuf::from( std::env::var("OUT_DIR").map_err(GeneratorError::VarError)? );
+	link().map_err(GeneratorError::WriteFailure)?;
 
 	gen_bindings("luau/Compiler/include/Luau/Compiler.h", out_dir.join("binds_compiler.rs"))?;
 	gen_bindings("luau/Ast/include/Luau/Ast.h", out_dir.join("binds_ast.rs"))?;

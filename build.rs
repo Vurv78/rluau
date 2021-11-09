@@ -7,8 +7,8 @@ enum GeneratorError {
 	VarError( std::env::VarError ),
 }
 
-const SOURCES: [&str; 4] = ["luau/VM/src", "luau/Ast/src", "luau/Analysis/src", "luau/Compiler/src"];
-const INCLUDES: [&str; 4] = ["luau/VM/include", "luau/Ast/include", "luau/Analysis/include", "luau/Compiler/include"];
+const SOURCES: [&str; 4] = ["vendor/luau/VM/src", "vendor/luau/Ast/src", "vendor/luau/Analysis/src", "vendor/luau/Compiler/src"];
+const INCLUDES: [&str; 4] = ["vendor/luau/VM/include", "vendor/luau/Ast/include", "vendor/luau/Analysis/include", "vendor/luau/Compiler/include"];
 
 fn setup_configs(conf: &mut cc::Build) -> Result<(), std::io::Error> {
 	conf

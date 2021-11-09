@@ -1,8 +1,5 @@
-# 🌔 ``luau-rs``
-> [Luau](https://github.com/Roblox/luau) bindings for the [Rust](https://www.rust-lang.org) programming language using [bindgen](https://github.com/rust-lang/rust-bindgen)
-
-## ⚠️ Disclaimer
-This does not provide bindings for everything as luau does not provide an adequate API for C bindings, which trips up bindgen & makes ffi exponentially more difficult (thanks to using C++'s ``std::string`` and whatnot). See [luau/121](https://github.com/Roblox/luau/issues/121). (It is also *untested* thanks to this..)
+# 🌔 ``luau-rs`` [![License](https://img.shields.io/github/license/Vurv78/luau-rs?color=red)](https://opensource.org/licenses/MIT) ![CI](https://github.com/Vurv78/luau-rs/actions/workflows/tests.yml/badge.svg)
+> [Luau](https://github.com/Roblox/luau) bindings for the [Rust](https://www.rust-lang.org) programming language using [Autocxx](https://github.com/google/autocxx)
 
 ## Usage
 Add this to your ``Cargo.toml``
@@ -15,6 +12,7 @@ luau = { version = "0.2.0", package = "luau-src" }
 ```rust
 // See this in action in the /tests/
 use luau_src::{ c_int, c_ulonglong, compiler::Luau::{CompileOptions, ParseOptions, compile}, vm };
+use std::ffi::CStr;
 unsafe fn example() {
 	let_cxx_string!(s = "local a: number = 5; print(a)");
 
@@ -35,12 +33,12 @@ unsafe fn example() {
 			1 => Ok("Thread exited unexpectedly"),
 			_ => {
 				let raw_str = vm::luaL_tolstring(state, c_int(-1), &mut c_ulonglong(0) as *mut c_ulonglong);
-				std::ffi::CStr::from_ptr(raw_str).to_str()
+				CStr::from_ptr(raw_str).to_str()
 			}
 		};
 		let err = err.unwrap_or("Unknown error");
 		let raw_str = vm::lua_debugtrace(state);
-		let debug_trace = std::ffi::CStr::from_ptr(raw_str).to_str().unwrap_or("Couldn't convert to &str");
+		let debug_trace = CStr::from_ptr(raw_str).to_str().unwrap_or("Couldn't convert to &str");
 		println!("{} Stack backtrace:\n {}", err, debug_trace);
 	}
 }

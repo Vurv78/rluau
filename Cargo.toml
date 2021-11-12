@@ -12,6 +12,7 @@ crate-type = ["lib"]
 [dependencies]
 cxx = "1.0.51"
 autocxx = { path = "vendor/autocxx", version = "0.13.0" }
+thiserror = "1.0.30"
 
 [build-dependencies]
 walkdir = "2.3.2"
@@ -20,5 +21,6 @@ cc = "1.0.71"
 autocxx-build = { path = "vendor/autocxx/gen/build", version = "0.13.0" }
 
 [features]
-default = []
+default = ["wrapper"]
+wrapper = [] # Safe wrappers for bindings. Can disable this if you want to try and layer something over this like hlua
 no-link = []

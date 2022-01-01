@@ -9,7 +9,8 @@ fn main() -> Result<(), CompileError> {
 
 	let lua = vm::Lua::new();
 
-	lua.load("main", bc, None);
+	lua.load("main", bc, None).expect("Failed to load bytecode");
+
 	let result = lua.pcall(0, 0, 0);
 
 	println!("Result: {:?}", result);

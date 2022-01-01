@@ -2,12 +2,13 @@
 name = "rluau"
 authors = ["Vurv78 <vurvdevelops@gmail.com>"]
 description = "High level luau bindings for Rust."
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 license = "MIT"
+categories = ["api-bindings", "game-development"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-luau-src = { version = "0.3.0", path = "../luau-src" }
-thiserror = "1.0.30"
+luau-src = { version = "0", path = "../luau-src" }
+thiserror = "1.0.3"

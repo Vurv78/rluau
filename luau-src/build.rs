@@ -1,5 +1,3 @@
-use std::path::PathBuf;
-
 macro_rules! luau_path {
 	($l:literal) => {
 		concat!("luau/", $l)
@@ -12,34 +10,34 @@ static INCLUDES: &[&str] = &[
 	luau_path!("Ast/include"),
 ];
 
+#[cfg(feature = "link")]
 static SOURCES: &[&str] = &[
 	luau_path!("VM/src"),
 	luau_path!("Compiler/src"),
 	luau_path!("Ast/src"),
 ];
 
-fn setup_configs(conf: &mut cc::Build) -> Result<(), std::io::Error> {
-	conf.cpp(true)
+#[cfg(feature = "link")]
+fn link() -> Result<(), std::io::Error> {
+	let mut build = cc::Build::new();
+
+	build
+		.cpp(true)
 		.flag_if_supported("-std=c++17")
 		.flag_if_supported("/std:c++17")
 		.includes(INCLUDES);
 
+	// Collect all .cpp files to compile
 	for src in SOURCES {
 		std::fs::read_dir(src)?
 			.filter_map(|e| e.ok())
 			.filter(|e| e.path().extension().map(|e| e == "cpp").unwrap_or(false))
 			.for_each(|e| {
-				conf.file(e.path());
+				build.file(e.path());
 			});
 	}
 
-	Ok(())
-}
-
-#[cfg(feature = "link")]
-fn link(build: &mut cc::Build) -> Result<(), std::io::Error> {
-	// Generate lib and object files
-	setup_configs(build)?;
+	// Compile to libluau.a
 	build.compile("luau");
 
 	// Link
@@ -69,7 +67,7 @@ macro_rules! cpp_bindings {
 }
 
 fn main() -> Result<(), std::io::Error> {
-	let out_dir = PathBuf::from(std::env::var("OUT_DIR").unwrap());
+	let out_dir = std::path::PathBuf::from(std::env::var("OUT_DIR").unwrap());
 
 	// VM Functions
 	cpp_bindings!()
@@ -101,11 +99,7 @@ fn main() -> Result<(), std::io::Error> {
 		.expect("Failed to generate Compiler bindings")
 		.write_to_file(out_dir.join("luau_compiler.rs"))?;
 
-	let mut b = cc::Build::new();
-	link(&mut b)?;
-
-	println!("cargo:rerun-if-changed=src/lib.rs");
-	println!("cargo:rerun-if-changed=src/raw/mod.rs");
+	link()?;
 
 	Ok(())
 }

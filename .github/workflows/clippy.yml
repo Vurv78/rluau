@@ -21,4 +21,4 @@ jobs:
       - uses: actions-rs/clippy-check@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          args: --no-link --tests
+          args: --no-default-features --tests

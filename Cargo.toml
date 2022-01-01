@@ -1,24 +1,6 @@
-[package]
-name = "luau-src"
-version = "0.2.0"
-edition = "2021"
-build = "build.rs"
-description = "Luau source code bindings"
-license = "MIT"
-
-[lib]
-crate-type = ["lib"]
-
-[dependencies]
-cxx = "1.0.51"
-autocxx = { path = "vendor/autocxx", version = "0.13.0" }
-
-[build-dependencies]
-walkdir = "2.3.2"
-bindgen = "0.59.1"
-cc = "1.0.71"
-autocxx-build = { path = "vendor/autocxx/gen/build", version = "0.13.0" }
-
-[features]
-default = []
-no-link = []
+[workspace]
+members = [
+	"luau-src",
+	"rluau"
+]
+exclude = ["examples"]

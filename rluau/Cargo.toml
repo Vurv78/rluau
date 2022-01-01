@@ -1,0 +1,13 @@
+[package]
+name = "rluau"
+authors = ["Vurv78 <vurvdevelops@gmail.com>"]
+description = "High level luau bindings for Rust."
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+luau-src = { version = "0.3.0", path = "../luau-src" }
+thiserror = "1.0.30"

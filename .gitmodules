@@ -1,7 +1,3 @@
-[submodule "autocxx"]
-	path = vendor/autocxx
-	url = https://github.com/google/autocxx
-	branch = cint_pod
-[submodule "luau"]
-	path = vendor/luau
+[submodule "luau-src/luau"]
+	path = luau-src/luau
 	url = https://github.com/Roblox/luau

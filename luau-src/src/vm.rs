@@ -1,3 +1,4 @@
+#![allow(clippy::missing_safety_doc)]
 use std::os::raw::{c_int, c_char};
 
 use crate::raw::vm as raw;
@@ -9,12 +10,12 @@ pub unsafe fn lua_pop(l: *mut lua_State, ind: c_int) {
 }
 
 #[inline(always)]
-pub unsafe fn lua_getglobal(l: *mut lua_State, name: *const c_char) -> () {
+pub unsafe fn lua_getglobal(l: *mut lua_State, name: *const c_char) {
 	lua_getfield(l, raw::LUA_GLOBALSINDEX, name);
 }
 
 #[inline(always)]
-pub unsafe fn lua_setglobal(l: *mut lua_State, name: *const c_char) -> () {
+pub unsafe fn lua_setglobal(l: *mut lua_State, name: *const c_char) {
 	lua_setfield(l, raw::LUA_GLOBALSINDEX, name);
 }
 

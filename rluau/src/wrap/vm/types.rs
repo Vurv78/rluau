@@ -64,6 +64,7 @@ impl Default for Luau {
 	}
 }
 
+#[allow(unused)]
 pub struct LuauRef {
 	state: *mut raw::lua_State,
 	idx: i32
@@ -79,10 +80,16 @@ pub struct LightUserdata(pub *mut c_void);
 pub struct String<'luau>(Cow<'luau, str>);
 
 impl<'luau> From<*const c_char> for String<'luau> {
+	// This should be removed entirely :/
+	#[allow(clippy::not_unsafe_ptr_arg_deref)]
 	fn from(value: *const c_char) -> Self {
-		String(unsafe {
-			std::ffi::CStr::from_ptr(value).to_string_lossy()
-		})
+		if value.is_null() {
+			String( Cow::Owned(std::string::String::new()) )
+		} else {
+			String(unsafe {
+				std::ffi::CStr::from_ptr(value).to_string_lossy()
+			})
+		}
 	}
 }
 

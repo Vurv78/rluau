@@ -2,20 +2,8 @@ use crate::compiler::CompileError;
 
 use super::prelude::*;
 
-pub struct LuaError(i32);
-
-#[derive(Debug, Error)]
-pub enum LoadError {
-	#[error("Runtime lua error. See https://github.com/Roblox/luau/blob/f1649a43cdf7dd9e41496913672e82b30c067234/VM/include/lua.h#L26")]
-	Runtime(i32), // TODO: Should map to crate::top::LuaStatus later.
-}
-
 impl Luau {
 	// Maybe these should be exposed but not sure about their names..
-	fn get_top(&self) -> i32 {
-		unsafe { raw::lua_gettop(self.raw) }
-	}
-
 	fn pop(&self, ind: i32) {
 		unsafe { raw::lua_pop(self.raw, ind) };
 	}

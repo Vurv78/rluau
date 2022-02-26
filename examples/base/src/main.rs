@@ -1,20 +1,29 @@
 use rluau::{
 	compiler::{self, CompileError, CompileOptions},
-	vm,
+	vm::{self, LuauOptions},
 };
 
-fn main() -> Result<(), CompileError> {
+const SOURCE: &str = r#"
+local foo: number = 55;
+exported = { }
+print( exported, foo);
+"#;
+
+fn main() -> Result<(), rluau::Error> {
 	let mut opts = CompileOptions::default();
-	let bc = compiler::compile("print('hello luau!')", &mut opts)?;
+	let bc = compiler::compile(SOURCE, &mut opts)?;
 
-	let lua = vm::Lua::new();
+	let luau = vm::Luau::new();
 
-	lua.load("main", bc, None).expect("Failed to load bytecode");
+	let var = luau.get_global("exported");
+	println!("{:?}", var); // Nil
 
-	let result = lua.pcall(0, 0, 0);
+	luau.load("main", bc, None)?;
+	let result = luau.pcall(0, 0, 0);
+	println!("Result: {:?}", result); // OK
 
-	println!("Result: {:?}", result);
-	// Error, because standard library is not loaded.
+	let var = luau.get_global("exported");
+	println!("{:?}", var); // Table
 
 	Ok(())
 }

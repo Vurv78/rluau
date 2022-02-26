@@ -1,2 +1,3 @@
 mod raw;
-pub use raw::{compiler, top, vm};
+pub mod vm;
+pub use raw::{compiler, top};

@@ -9,6 +9,9 @@ pub use types::*;
 pub enum CompileError {
 	#[error("Failed to convert input code to CString {0}")]
 	Conversion(#[from] std::ffi::NulError),
+
+	#[error("Failed to compile input code {0}")]
+	Syntax(String),
 }
 
 pub fn compile<S: AsRef<str>>(
@@ -28,6 +31,7 @@ pub fn compile<S: AsRef<str>>(
 			bc_size,
 		)
 	};
+
 	let c_str = unsafe { CStr::from_ptr(bc) };
 	Ok(c_str.to_bytes())
 }

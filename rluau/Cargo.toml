@@ -2,7 +2,7 @@
 name = "rluau"
 authors = ["Vurv78 <vurvdevelops@gmail.com>"]
 description = "High level luau bindings for Rust."
-version = "0.1.1"
+version = "0.2.0"
 edition = "2021"
 license = "MIT"
 categories = ["api-bindings", "game-development"]
@@ -12,3 +12,8 @@ categories = ["api-bindings", "game-development"]
 [dependencies]
 luau-src = { version = "0", path = "../luau-src" }
 thiserror = "1.0.3"
+
+bitflags = { version = "1.3", optional = true }
+
+[features]
+default = ["bitflags"]

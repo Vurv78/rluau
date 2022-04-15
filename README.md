@@ -1,15 +1,4 @@
-# 🌔 ``rluau`` [![License](https://img.shields.io/github/license/Vurv78/luau-rs?color=red)](https://opensource.org/licenses/MIT) ![CI](https://github.com/Vurv78/luau-rs/actions/workflows/tests.yml/badge.svg)
-> High level [Luau](https://github.com/Roblox/luau) bindings for the [Rust](https://www.rust-lang.org) programming language. Think [rlua](https://github.com/amethyst/rlua) but for Luau.
+# ARCHIVED
+I don't have enough time to work on this, and mlua now supports it as a much more viable alternative. https://github.com/khvzak/mlua
 
-## Usage
-Add this to your ``Cargo.toml``
-```toml
-[dependencies]
-rluau = { version = "0.1.0" }
-```
-
-## Example
-See examples [here](https://github.com/Vurv78/rluau/tree/master/examples)
-
-## Requirements
-See the requirements for bindgen [here](https://rust-lang.github.io/rust-bindgen/requirements.html)
+There's no need to reinvent the wheel, and everything else that luau provides (through the analyzer, parser, etc) are in C++ and very unfriendly to FFI to be provided to Rust adequately. Sorry for the disappointment, glad there was no need for a full reimplementation, however.
